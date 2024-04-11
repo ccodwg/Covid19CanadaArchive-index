@@ -9,6 +9,8 @@ output_dir = 'uuid'
 if os.path.exists(output_dir):
     shutil.rmtree(output_dir)
 os.makedirs(output_dir)
+output_dir_json = os.path.join(output_dir, 'json')
+os.makedirs(output_dir_json)
 
 # connect to index.db
 conn = sqlite3.connect('index.db')
@@ -29,8 +31,8 @@ for uuid in uuids:
     assert df.shape[0] == df2.shape[0]
     assert df['file_name_url'].isnull().sum() == 0
     # save JSON
-    out = os.path.join(output_dir, f"{uuid}.json")
-    df.to_json(out, orient = 'records')
+    out_json = os.path.join(output_dir_json, f"{uuid}.json")
+    df.to_json(out_json, orient = 'records')
     # print progress every 25 tables
     i = uuids.index(uuid) + 1
     if i % 25 == 0:
