@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import os
 import shutil
+import json
 
 # create clean output directory
 output_dir = 'uuid'
@@ -35,7 +36,8 @@ for uuid in uuids:
     assert sum(df['file_duplicate'] == 0) == len(df['file_url'].unique())
     # save JSON
     out_json = os.path.join(output_dir_json, f"{uuid}.json")
-    df.to_json(out_json, orient = 'records')
+    with open(out_json, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(json.loads(df.to_json(orient='records')), separators=(',', ':')))
     # save CSV
     out_csv = os.path.join(output_dir_csv, f"{uuid}.csv")
     df.to_csv(out_csv, index = False)
